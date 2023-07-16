@@ -1,6 +1,5 @@
 import blickfeld_scanner
 import numpy as np
-from blickfeld_scanner import stream
 from blickfeld_scanner.protocol.config import scan_pattern_pb2
 
 file_path = "rec2.bfpc"
@@ -31,7 +30,8 @@ def read_frames_from_file(stream_to_matrix, queue):
 
     num_scanlines = 32  # hardcoded for INSPIRe scan pattern
     num_points = len(points) // num_scanlines
-    range_matrix = points['range'].reshape(num_scanlines, num_points)  # gets a matrix (16x362) or (32x181) in case of INSPIRe
+    range_matrix = points['range'].reshape(num_scanlines,
+                                           num_points)  # gets a matrix (16x362) or (32x181) in case of INSPIRe
 
     index_matrix = points['point_id'].reshape(num_scanlines, num_points)
 
@@ -66,13 +66,13 @@ def read_frames_from_file(stream_to_matrix, queue):
     # print(range_matrix)
 
 
-def fetch_numpy_frame(target, queue):
+def fetch_numpy_frame(ip_address, queue):
     """Fetch the point cloud of a device as a numpy structued array.
-
-    :param target: hostname or IP address of the device
+    :param queue: queue for sharing data between threads
+    :param ip_address: hostname or IP address of the device
     """
     while True:
-        device = blickfeld_scanner.scanner(target)  # Connect to the device
+        device = blickfeld_scanner.scanner(ip_address)  # Connect to the device
 
         device.set_scan_pattern(name="INSPIRe")
 
@@ -80,7 +80,6 @@ def fetch_numpy_frame(target, queue):
         point_filter_device = scan_pattern_pb2.ScanPattern().Filter()
         point_filter_device.max_number_of_returns_per_point = 1  # Set max number of returns to 2. The default value is 1.
         point_filter_device.delete_points_without_returns = False  # Filter points with no returns. This reduces the dataset only to valid returns.
-
         # Create a point cloud stream object
         # The `as_numpy` flag enables the numpy support.
         stream = device.get_point_cloud_stream(point_filter=point_filter_device, as_numpy=True)
