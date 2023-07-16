@@ -10,7 +10,7 @@ class ScannerUI:
     def __init__(self, scanner_config: dict):
         pygame.init()
         self._screen, self._screen_size = self._init_screen()
-        self._background = self._load_background()
+        self._background = self._load_background(scanner_config)
 
         self._point_size_factor = 10
 
@@ -32,9 +32,10 @@ class ScannerUI:
         pygame.display.set_caption("2D Point Cloud")
         return pygame.display.set_mode(screen_size, pygame.FULLSCREEN), screen_size
 
-    def _load_background(self):
+    @staticmethod
+    def _load_background(scanner_config):
         # Load the background image
-        background_photo = pygame.image.load(self._scanner_config['background_photo_path'])
+        background_photo = pygame.image.load(scanner_config['background_photo_path'])
         # Scale the image to fit the screen size
         background = pygame.transform.scale(background_photo, size=(2000, 2000))
         return background
