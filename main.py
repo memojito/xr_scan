@@ -14,7 +14,7 @@ background_image_dependency = False
 point_size_factor = 10
 
 # Load the background image
-background = pygame.image.load('test-ground.jpg')
+background = pygame.image.load('resources/test-ground.jpg')
 # Scale the image to fit the screen size
 background = pygame.transform.scale(background, size=(2000, 2000))
 
@@ -73,6 +73,8 @@ def render_points(matrix, size_factor, screen, screen_size):
 
             x = int(i * screen_size[0] / (matrix.shape[0] - 1) + 200)
             y = int(j * screen_size[1] / (matrix.shape[1] - 1) + 20)
+
+            print((x, y))
             size = int(weight * size_factor)
 
             if color == (0, 255, 0):
@@ -168,7 +170,7 @@ if __name__ == "__main__":
     point_size = 10
 
     # Set up the screen
-    screen = pygame.display.set_mode(screen_size)
+    screen = pygame.display.set_mode(screen_size, pygame.FULLSCREEN)
     pygame.display.set_caption("2D Point Cloud")
 
     # Main loop

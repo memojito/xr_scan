@@ -5,17 +5,18 @@ from blickfeld_scanner.protocol.config import scan_pattern_pb2
 
 file_path = "rec2.bfpc"
 
+
 # Make a connection to the blickfeld scanner
 # scanner_ip = "0.0.0.0"
 # scanner = bs.scanner(scanner_ip)
 
-point_filter = scan_pattern_pb2.ScanPattern().Filter()
-point_filter.range.minimum = 1.5  # minimum range for a point to be sent out is 5m
-point_filter.range.maximum = 5  # maximum range for a point to be sent out is 50m
-point_filter.max_number_of_returns_per_point = 1  # Set max number of returns to 2. The default value is 1.
-point_filter.delete_points_without_returns = False  # Filter points with no returns.
-point_stream = stream.point_cloud(from_file=file_path, filter=point_filter, as_numpy=True)
-metadata = point_stream.get_metadata()
+# point_filter = scan_pattern_pb2.ScanPattern().Filter()
+# point_filter.range.minimum = 1.5  # minimum range for a point to be sent out is 5m
+# point_filter.range.maximum = 5  # maximum range for a point to be sent out is 50m
+# point_filter.max_number_of_returns_per_point = 1  # Set max number of returns to 2. The default value is 1.
+# point_filter.delete_points_without_returns = False  # Filter points with no returns.
+# point_stream = stream.point_cloud(from_file=file_path, filter=point_filter, as_numpy=True)
+# metadata = point_stream.get_metadata()
 # print(f"Metadata:\n{metadata}")
 
 
@@ -26,11 +27,11 @@ def read_frames_from_file(stream_to_matrix, queue):
     points['range'] = np.clip(points['range'], 1, 6)
 
     # print(points['point_id'])
-    print(frame.scanlines)
+    # print(frame.scanlines)
 
-    num_scanlines = 16
+    num_scanlines = 16  # hardcoded for INSPIRe scan pattern
     num_points = len(points) // num_scanlines
-    range_matrix = points['range'].reshape(num_scanlines, num_points)
+    range_matrix = points['range'].reshape(num_scanlines, num_points)  # gets a matrix (16x362) in case of INSPIRe
 
     index_matrix = points['point_id'].reshape(num_scanlines, num_points)
 
@@ -55,10 +56,10 @@ def read_frames_from_file(stream_to_matrix, queue):
 
     # index_matrix = np.transpose(index_matrix)
 
-    #print(index_matrix)
+    print(index_matrix)
     # print(index_matrix[29])
 
-    print(range_matrix)
+    # print(range_matrix)
 
 
 def fetch_numpy_frame(target, queue):
