@@ -1,1 +1,4 @@
 /static/
+.idea/
+resources/
+__pycache__/
