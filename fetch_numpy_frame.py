@@ -29,9 +29,9 @@ def read_frames_from_file(stream_to_matrix, queue):
     # print(points['point_id'])
     # print(frame.scanlines)
 
-    num_scanlines = 16  # hardcoded for INSPIRe scan pattern
+    num_scanlines = 32  # hardcoded for INSPIRe scan pattern
     num_points = len(points) // num_scanlines
-    range_matrix = points['range'].reshape(num_scanlines, num_points)  # gets a matrix (16x362) in case of INSPIRe
+    range_matrix = points['range'].reshape(num_scanlines, num_points)  # gets a matrix (16x362) or (32x181) in case of INSPIRe
 
     index_matrix = points['point_id'].reshape(num_scanlines, num_points)
 
@@ -47,6 +47,10 @@ def read_frames_from_file(stream_to_matrix, queue):
 
     # Reorder matrix
     range_matrix = range_matrix[zigzag_indices, :]
+
+    # Reverse column order for the first half of rows in the zigzag pattern
+    for i in range(len(descending_odds)):
+        range_matrix[i, :] = range_matrix[i, ::-1]
 
     queue.put(range_matrix)
 

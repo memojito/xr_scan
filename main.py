@@ -71,10 +71,10 @@ def render_points(matrix, size_factor, screen, screen_size):
             else:
                 color = (255, 255, 255)
 
-            x = int(i * screen_size[0] / (matrix.shape[0] - 1) + 200)
-            y = int(j * screen_size[1] / (matrix.shape[1] - 1) + 20)
+            x = int(j * screen_size[0] / (matrix.shape[1] - 1) + 200)
+            y = int(i * screen_size[1] / (matrix.shape[0]) + 40)
 
-            print((x, y))
+            # print((x, y))
             size = int(weight * size_factor)
 
             if color == (0, 255, 0):
