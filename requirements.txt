@@ -1,0 +1,5 @@
+blickfeld-scanner==2.20.6
+numpy==1.25.1
+scipy==1.11.1
+pygame==2.5.0
+toml==0.10.2
