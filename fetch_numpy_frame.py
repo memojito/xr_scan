@@ -52,6 +52,11 @@ def read_frames_from_file(stream_to_matrix, queue):
     for i in range(len(descending_odds)):
         range_matrix[i, :] = range_matrix[i, ::-1]
 
+    # Rotate matrix 180 degrees if the scanner is rotated too
+    range_matrix = [row[::-1] for row in range_matrix[::-1]]
+
+    print(range_matrix)
+
     queue.put(range_matrix)
 
     # range_matrix = np.transpose(range_matrix)
