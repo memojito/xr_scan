@@ -40,7 +40,7 @@ class ScannerUI:
         background = pygame.transform.scale(background_photo, size=(2000, 2000))
         return background
 
-    def loop(self, range_matrix_queue):
+    def loop(self, range_matrix_queue, thread_event):
         running = True
         matrix_size = 0
 
@@ -104,6 +104,7 @@ class ScannerUI:
                 self._render_lines(matrix_weights)
             pygame.display.flip()
         # Quit Pygame
+        thread_event.set()
         pygame.quit()
 
     # Define function to render points

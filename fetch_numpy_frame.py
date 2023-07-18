@@ -66,12 +66,13 @@ def read_frames_from_file(stream_to_matrix, queue):
     # print(range_matrix)
 
 
-def fetch_numpy_frame(ip_address, queue):
+def fetch_numpy_frame(ip_address, queue, thread_event):
     """Fetch the point cloud of a device as a numpy structued array.
     :param queue: queue for sharing data between threads
     :param ip_address: hostname or IP address of the device
+    :param thread_event: event for stop thread
     """
-    while True:
+    while not thread_event.is_set():
         device = blickfeld_scanner.scanner(ip_address)  # Connect to the device
 
         device.set_scan_pattern(name="INSPIRe")
