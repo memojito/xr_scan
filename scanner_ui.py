@@ -57,6 +57,7 @@ class ScannerUI:
                     running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        thread_event.set()
                         pygame.quit()
                     elif event.key == pygame.K_UP:
                         matrix_size += 1
