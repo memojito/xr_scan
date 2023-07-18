@@ -162,46 +162,46 @@ class ScannerUI:
     def _render_lines(self, matrix):
         # render line for each point to it neighbour point
         for i in range(matrix.shape[0]):
-            for j in range(matrix.shape[1]):
+            for j in range(matrix.shape[1] - 1):
                 x1 = int(i * self._screen_size[0] / (matrix.shape[0] - 1) + 200)
                 y1 = int(j * self._screen_size[1] / (matrix.shape[1] - 1) + 20)
                 weight = matrix[i][j]
                 if weight <= 0:
                     continue
-                for dx in [-1, 0, 1]:
-                    for dy in [-1, 0, 1]:
-                        # line width
-                        line_width = 3
-                        if dx == 0 and dy == 0:
-                            continue
-                        if i + dx < 0 or i + dx >= matrix.shape[0] or j + dy < 0 or j + dy >= matrix.shape[1]:
-                            continue
-                        weight2 = matrix[i + dx][j + dy]
-                        if weight2 <= 0:
-                            continue
-                        x2 = int((i + dx) * self._screen_size[0] / (matrix.shape[0] - 1) + 200)
-                        y2 = int((j + dy) * self._screen_size[1] / (matrix.shape[1] - 1) + 20)
-                        color = (0, 0, 0)
-                        if self._weight_color_dependency:
-                            if weight <= 0:
-                                weight = 0
-                            elif weight <= 0.2:
-                                color = (0, 0, 255)
-                            elif 0.2 < weight <= 0.4:
-                                color = (173, 216, 230)
-                            elif 0.6 < weight <= 0.7:
-                                color = (255, 174, 66)
-                            elif weight > 0.7:
-                                color = (255, 0, 0)
-                            else:
-                                color = (0, 255, 0)
-                                line_width = 0
-                        elif self._red_color_dependency:
-                            color = (weight * 255, 0, 0)
-                        elif self._green_color_dependency:
-                            color = (0, weight * 255, 0)
-                        elif self._blue_color_dependency:
-                            color = (0, 0, weight * 255)
-                        else:
-                            color = WHITE_COLOR
-                        pygame.draw.line(self._screen, color, (x1, y1), (x2, y2), line_width)
+
+                # Only considering the right neighbor, so dx = 0 and dy = 1
+                dx = 0
+                dy = 1
+
+                weight2 = matrix[i + dx][j + dy]
+                if weight2 <= 0:
+                    continue
+                x2 = int((i + dx) * self._screen_size[0] / (matrix.shape[0] - 1) + 200)
+                y2 = int((j + dy) * self._screen_size[1] / (matrix.shape[1] - 1) + 20)
+
+                # line width
+                line_width = 3
+
+                # Determine the color based on the weight
+                if self._weight_color_dependency:
+                    if weight <= 0.2:
+                        color = (0, 0, 255)
+                    elif 0.2 < weight <= 0.4:
+                        color = (173, 216, 230)
+                    elif 0.6 < weight <= 0.7:
+                        color = (255, 174, 66)
+                    elif weight > 0.7:
+                        color = (255, 0, 0)
+                    else:
+                        color = (0, 255, 0)
+                        line_width = 0
+                elif self._red_color_dependency:
+                    color = (weight * 255, 0, 0)
+                elif self._green_color_dependency:
+                    color = (0, weight * 255, 0)
+                elif self._blue_color_dependency:
+                    color = (0, 0, weight * 255)
+                else:
+                    color = (255, 255, 255)
+
+                pygame.draw.line(self._screen, color, (x1, y1), (x2, y2), line_width)
