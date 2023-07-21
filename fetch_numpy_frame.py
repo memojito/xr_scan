@@ -78,15 +78,21 @@ def fetch_numpy_frame(ip_address, queue, thread_event):
     :param thread_event: event for stop thread
     """
     while not thread_event.is_set():
-        device = blickfeld_scanner.scanner(ip_address)  # Connect to the device
+        try:
+            device = blickfeld_scanner.scanner(ip_address)  # Connect to the device
 
-        device.set_scan_pattern(name="INSPIRe")
+            device.set_scan_pattern(name="High frame rate") # XRgrid, High frame rate
 
-        # Create filter to filter points and returns by point attributes during the post-processing on the device.
-        point_filter_device = scan_pattern_pb2.ScanPattern().Filter()
-        point_filter_device.max_number_of_returns_per_point = 1  # Set max number of returns to 2. The default value is 1.
-        point_filter_device.delete_points_without_returns = False  # Filter points with no returns. This reduces the dataset only to valid returns.
-        # Create a point cloud stream object
-        # The `as_numpy` flag enables the numpy support.
-        stream = device.get_point_cloud_stream(point_filter=point_filter_device, as_numpy=True)
-        read_frames_from_file(stream, queue)
+            # named_scan_patterns = device.get_named_scan_patterns()  # Get named scan patterns
+            # for scan_pattern in named_scan_patterns.configs:
+            #     print("'" + str(scan_pattern.name) + "' succesfully stored.")
+
+            # Create filter to filter points and returns by point attributes during the post-processing on the device.
+            point_filter_device = scan_pattern_pb2.ScanPattern().Filter()
+            # Create a point cloud stream object
+            # The `as_numpy` flag enables the numpy support.
+            stream = device.get_point_cloud_stream(point_filter=point_filter_device, as_numpy=True)
+            read_frames_from_file(stream, queue)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            thread_event.set()
