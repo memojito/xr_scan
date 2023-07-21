@@ -28,7 +28,7 @@ class ScannerUI:
     @staticmethod
     def _init_screen():
         pygame.display.set_mode((0, 0))
-        screen_size = (pygame.display.Info().current_w - 400, pygame.display.Info().current_h - 20)
+        screen_size = (pygame.display.Info().current_w - 800, pygame.display.Info().current_h - 20)
         pygame.display.set_caption("2D Point Cloud")
         return pygame.display.set_mode(screen_size, pygame.FULLSCREEN), screen_size
 
@@ -138,7 +138,7 @@ class ScannerUI:
                 else:
                     color = (255, 255, 255)
 
-                x = int(j * self._screen_size[0] / (matrix.shape[1] - 1) + 200)
+                x = int(j * self._screen_size[0] / (matrix.shape[1] - 1) + 310)
                 y = int(i * self._screen_size[1] / (matrix.shape[0]) + 40)
 
                 size = int(weight * self._point_size_factor)
