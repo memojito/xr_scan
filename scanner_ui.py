@@ -48,7 +48,7 @@ class ScannerUI:
             if range_matrix_queue.empty():
                 continue
             range_matrix = range_matrix_queue.get()
-            matrix_weights = normalize_matrix(range_matrix)
+            matrix_weights = range_matrix
             self._render_points(matrix_weights)
 
             # Handle events
@@ -113,20 +113,20 @@ class ScannerUI:
         for i in range(matrix.shape[0]):
             for j in range(matrix.shape[1]):
                 weight = matrix[i][j]
-                # Make sure weight is not negative
-                weight = max(weight, 0)
-                # Make sure weight is not greater than 1
-                weight = min(weight, 1)
+                # # Make sure weight is not negative
+                # weight = max(weight, 0)
+                # # Make sure weight is not greater than 1
+                # weight = min(weight, 1)
 
                 if self._weight_color_dependency:
-                    if weight <= 0.2:
+                    if weight <= 1.8:
                         color = (0, 0, 255)
-                    elif 0.2 < weight <= 0.4:
-                        color = (173, 216, 230)
-                    elif 0.4 < weight <= 0.6:
+                    # elif 0.2 < weight <= 0.4:
+                    #     color = (173, 216, 230)
+                    elif 1.8 < weight <= 2.0:
                         color = (0, 255, 0)
-                    elif 0.6 < weight <= 0.8:
-                        color = (255, 174, 66)
+                    # elif 0.6 < weight <= 0.8:
+                    #     color = (255, 174, 66)
                     else:  # 0.8 <= weight <= 1
                         color = (255, 0, 0)
                 elif self._red_color_dependency:
