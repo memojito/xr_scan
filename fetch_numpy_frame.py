@@ -41,6 +41,19 @@ def process_matrix(points, num_scanlines, num_points, descending_odds, ascending
     return range_matrix
 
 
+def correct_distances(distances, max_angle, scanner_height):
+    num_scanlines = len(distances)
+    # convert max angle to radians
+    max_angle_rad = np.deg2rad(max_angle)
+    # calculate corrected distances
+    corrected = []
+    for i, scanline in enumerate(distances):
+        angle = (i / (num_scanlines - 1)) * max_angle_rad * 2 - max_angle_rad
+        corrected_scanline = scanline * np.cos(angle)
+        corrected.append(corrected_scanline)
+    return np.array(corrected)
+
+
 def read_frames_from_file(stream_to_matrix, queue):
 
     frame, points = stream_to_matrix.recv_frame_as_numpy()
@@ -64,9 +77,19 @@ def read_frames_from_file(stream_to_matrix, queue):
     # Rotate matrix 180 degrees if the scanner is rotated too
     range_matrix1 = [row[::-1] for row in range_matrix1[::-1]]
 
+    max_angle = 45  # replace with your scanner's max angle
+    scanner_height = 1.95
+
+    range_matrix1 = correct_distances(range_matrix1, max_angle, scanner_height)
+    range_matrix2 = correct_distances(range_matrix2, max_angle, scanner_height)
+
     # Queue each processed half
     queue.put(range_matrix1)
     queue.put(range_matrix2)
+
+    # print(f"Scanline 0: {range_matrix1[0]}\n")
+    # print(f"Scanline 13: {range_matrix1[13]}\n")
+    # print(f"Scanline 27: {range_matrix1[27]}\n\n")
 
     # range_matrix = np.transpose(range_matrix)
 
@@ -75,7 +98,7 @@ def read_frames_from_file(stream_to_matrix, queue):
     # print(index_matrix)
     # print(index_matrix[28])
 
-    # print(range_matrix[54])
+    print(range_matrix1)
     # print(range_matrix[28])
     # print(range_matrix[55])
 
