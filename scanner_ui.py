@@ -139,7 +139,7 @@ class ScannerUI:
                     color = (255, 255, 255)
 
                 x = int(j * self._screen_size[0] / (matrix.shape[1] - 1) + 310)
-                y = int(i * self._screen_size[1] / (matrix.shape[0]) + 40)
+                y = int(i * self._screen_size[1] / (matrix.shape[0] * 1.3) + 140)
 
                 size = int(weight * self._point_size_factor)
 
@@ -163,8 +163,8 @@ class ScannerUI:
         # render line for each point to it neighbour point
         for i in range(matrix.shape[0]):
             for j in range(matrix.shape[1] - 1):
-                x1 = int(i * self._screen_size[0] / (matrix.shape[0] - 1) + 200)
-                y1 = int(j * self._screen_size[1] / (matrix.shape[1] - 1) + 20)
+                x1 = int(j * self._screen_size[0] / (matrix.shape[1] - 1) + 310)
+                y1 = int(i * self._screen_size[1] / (matrix.shape[0] * 1.3) + 140)
                 weight = matrix[i][j]
                 if weight <= 0:
                     continue
@@ -176,8 +176,8 @@ class ScannerUI:
                 weight2 = matrix[i + dx][j + dy]
                 if weight2 <= 0:
                     continue
-                x2 = int((i + dx) * self._screen_size[0] / (matrix.shape[0] - 1) + 200)
-                y2 = int((j + dy) * self._screen_size[1] / (matrix.shape[1] - 1) + 20)
+                x2 = int((j + dx) * self._screen_size[0] / (matrix.shape[1] - 1) + 310)
+                y2 = int((i + dy) * self._screen_size[1] / (matrix.shape[0] * 1.3) + 140)
 
                 # line width
                 line_width = 3
