@@ -31,7 +31,7 @@ def correct_distances(distances, max_angle_rad, _scanner_height):
     num_scanlines, num_angles = distances.shape
 
     # Create a 1D array for the angles
-    angles = np.linspace(-max_angle_rad, max_angle_rad, num_angles)
+    angles = np.linspace(-max_angle_rad/2, max_angle_rad/2, num_angles)
     angles_2d = np.tile(angles, (num_scanlines, 1))
     corrected = distances * np.cos(angles_2d)
     return corrected
