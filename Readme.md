@@ -1,5 +1,5 @@
 ## xr_scan
-An interactive data visualisation application for a LiDAR scanner Cube 1 by Blickfeld.
+An interactive data visualisation application for a LiDAR scanner Cube 1 by Blickfeld.\
 Check out the Cube 1 official documentation: https://docs.blickfeld.com/cube/latest/index.html.
 
 
