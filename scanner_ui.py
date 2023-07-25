@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 from utils import normalize_matrix, resize_matrix
 
@@ -44,11 +46,11 @@ class ScannerUI:
         running = True
         matrix_size = 0
 
-        while running:
+        while running & (not thread_event.is_set()):
             if range_matrix_queue.empty():
                 continue
             range_matrix = range_matrix_queue.get()
-            matrix_weights = normalize_matrix(range_matrix)
+            matrix_weights = range_matrix
             self._render_points(matrix_weights)
 
             # Handle events
@@ -59,6 +61,7 @@ class ScannerUI:
                     if event.key == pygame.K_ESCAPE:
                         thread_event.set()
                         pygame.quit()
+                        sys.exit()
                     elif event.key == pygame.K_UP:
                         matrix_size += 1
                         matrix_weights = resize_matrix(matrix_weights, matrix_size)
@@ -107,26 +110,27 @@ class ScannerUI:
         # Quit Pygame
         thread_event.set()
         pygame.quit()
+        sys.exit()
 
     # Define function to render points
     def _render_points(self, matrix):
         for i in range(matrix.shape[0]):
             for j in range(matrix.shape[1]):
                 weight = matrix[i][j]
-                # Make sure weight is not negative
-                weight = max(weight, 0)
-                # Make sure weight is not greater than 1
-                weight = min(weight, 1)
+                # # Make sure weight is not negative
+                # weight = max(weight, 0)
+                # # Make sure weight is not greater than 1
+                # weight = min(weight, 1)
 
                 if self._weight_color_dependency:
-                    if weight <= 0.2:
+                    if weight <= 2.1:
                         color = (0, 0, 255)
-                    elif 0.2 < weight <= 0.4:
-                        color = (173, 216, 230)
-                    elif 0.4 < weight <= 0.6:
+                    # elif 0.2 < weight <= 0.4:
+                    #     color = (173, 216, 230)
+                    elif 2.1 < weight <= 2.3:
                         color = (0, 255, 0)
-                    elif 0.6 < weight <= 0.8:
-                        color = (255, 174, 66)
+                    # elif 0.6 < weight <= 0.8:
+                    #     color = (255, 174, 66)
                     else:  # 0.8 <= weight <= 1
                         color = (255, 0, 0)
                 elif self._red_color_dependency:
@@ -139,7 +143,7 @@ class ScannerUI:
                     color = (255, 255, 255)
 
                 x = int(j * self._screen_size[0] / (matrix.shape[1] - 1) + 310)
-                y = int(i * self._screen_size[1] / (matrix.shape[0]) + 40)
+                y = int(i * self._screen_size[1] / (matrix.shape[0] * 1.3) + 140)
 
                 size = int(weight * self._point_size_factor)
 
@@ -163,8 +167,8 @@ class ScannerUI:
         # render line for each point to it neighbour point
         for i in range(matrix.shape[0]):
             for j in range(matrix.shape[1] - 1):
-                x1 = int(i * self._screen_size[0] / (matrix.shape[0] - 1) + 200)
-                y1 = int(j * self._screen_size[1] / (matrix.shape[1] - 1) + 20)
+                x1 = int(j * self._screen_size[0] / (matrix.shape[1] - 1) + 310)
+                y1 = int(i * self._screen_size[1] / (matrix.shape[0] * 1.3) + 140)
                 weight = matrix[i][j]
                 if weight <= 0:
                     continue
@@ -176,8 +180,8 @@ class ScannerUI:
                 weight2 = matrix[i + dx][j + dy]
                 if weight2 <= 0:
                     continue
-                x2 = int((i + dx) * self._screen_size[0] / (matrix.shape[0] - 1) + 200)
-                y2 = int((j + dy) * self._screen_size[1] / (matrix.shape[1] - 1) + 20)
+                x2 = int((j + dx) * self._screen_size[0] / (matrix.shape[1] - 1) + 310)
+                y2 = int((i + dy) * self._screen_size[1] / (matrix.shape[0] * 1.3) + 140)
 
                 # line width
                 line_width = 3
