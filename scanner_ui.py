@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 from utils import normalize_matrix, resize_matrix
 
@@ -44,7 +46,7 @@ class ScannerUI:
         running = True
         matrix_size = 0
 
-        while running:
+        while running & (not thread_event.is_set()):
             if range_matrix_queue.empty():
                 continue
             range_matrix = range_matrix_queue.get()
@@ -59,6 +61,7 @@ class ScannerUI:
                     if event.key == pygame.K_ESCAPE:
                         thread_event.set()
                         pygame.quit()
+                        sys.exit()
                     elif event.key == pygame.K_UP:
                         matrix_size += 1
                         matrix_weights = resize_matrix(matrix_weights, matrix_size)
@@ -107,6 +110,7 @@ class ScannerUI:
         # Quit Pygame
         thread_event.set()
         pygame.quit()
+        sys.exit()
 
     # Define function to render points
     def _render_points(self, matrix):
@@ -119,11 +123,11 @@ class ScannerUI:
                 # weight = min(weight, 1)
 
                 if self._weight_color_dependency:
-                    if weight <= 1.8:
+                    if weight <= 2.1:
                         color = (0, 0, 255)
                     # elif 0.2 < weight <= 0.4:
                     #     color = (173, 216, 230)
-                    elif 1.8 < weight <= 2.0:
+                    elif 2.1 < weight <= 2.3:
                         color = (0, 255, 0)
                     # elif 0.6 < weight <= 0.8:
                     #     color = (255, 174, 66)
